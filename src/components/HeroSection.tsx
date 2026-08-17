@@ -109,23 +109,30 @@ export default function HeroSection() {
     // screens since a single touch-scroll flick covers far more distance than a wheel
     // tick, so the sequence needs more room to read as scrubbed rather than skipped.
     <div ref={pinRef} className="relative snap-start h-[260svh] sm:h-[220svh] md:h-[190svh]">
-      <section ref={ref} className="sticky top-0 h-[100svh] flex flex-col items-center justify-center z-10 px-6 pt-24 pb-20 overflow-hidden">
+      <section ref={ref} className="sticky top-0 h-[100svh] overflow-hidden">
+        {/* Explicit positioning context for the absolutely-positioned layers below —
+            deliberately not relying on the sticky section itself to establish the
+            containing block, since that's inconsistent enough across mobile browser
+            engines to leave the globe measuring the whole pinned scroll stage instead
+            of just this one viewport-tall slot (causing both the mis-sized/mis-scaled
+            globe and the scroll-progress math jumping straight to the end). */}
+        <div className="relative w-full h-full flex flex-col items-center justify-center px-6 pt-24 pb-20">
 
-        {/* 3D particle globe backdrop */}
-        <div className="absolute inset-0 z-0">
-          <ParticleGlobe pinRef={pinRef} />
-        </div>
+          {/* 3D particle globe backdrop */}
+          <div className="absolute inset-0 z-0">
+            <ParticleGlobe pinRef={pinRef} />
+          </div>
 
-      {/* Floating tech chips */}
-      <div className="absolute inset-0 max-w-6xl mx-auto pointer-events-none">
-        <div className="relative w-full h-full pointer-events-auto">
-          {chips.map((chip) => (
-            <FloatingChip key={chip.label} {...chip} />
-          ))}
-        </div>
-      </div>
+          {/* Floating tech chips */}
+          <div className="absolute inset-0 max-w-6xl mx-auto pointer-events-none">
+            <div className="relative w-full h-full pointer-events-auto">
+              {chips.map((chip) => (
+                <FloatingChip key={chip.label} {...chip} />
+              ))}
+            </div>
+          </div>
 
-      <div className="max-w-4xl mx-auto w-full flex flex-col items-center text-center relative">
+          <div className="max-w-4xl mx-auto w-full flex flex-col items-center text-center relative z-10">
 
         {/* Eyebrow / coordinates label */}
         <p
@@ -195,6 +202,7 @@ export default function HeroSection() {
           ))}
         </div>
 
+          </div>
         </div>
       </section>
     </div>

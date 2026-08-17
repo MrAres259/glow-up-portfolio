@@ -197,8 +197,13 @@ export default function ParticleGlobe({ pinRef }: { pinRef?: React.RefObject<HTM
     const handleScroll = () => {
       const progressEl = pinRef?.current ?? container;
       const rect = progressEl.getBoundingClientRect();
-      const viewportSlot = pinRef?.current ? container.getBoundingClientRect().height : window.innerHeight;
-      const scrollableDistance = Math.max(rect.height - viewportSlot, 1);
+      const containerHeight = container.getBoundingClientRect().height;
+      const viewportSlot = pinRef?.current && containerHeight > 0 ? containerHeight : window.innerHeight;
+      // Defensively floored well above 0: if either measurement comes back wrong for
+      // a moment (mobile browsers can report transient/odd values while their address
+      // bar is animating, or before layout has fully settled), a near-zero denominator
+      // here would make the tiniest scroll jump straight to the end of the sequence.
+      const scrollableDistance = Math.max(rect.height - viewportSlot, 400);
       pinTarget = Math.min(Math.max(-rect.top / scrollableDistance, 0), 1);
     };
     if (!reduceMotion) {
@@ -206,11 +211,11 @@ export default function ParticleGlobe({ pinRef }: { pinRef?: React.RefObject<HTM
       handleScroll();
     }
 
-    // Shrinks the globe's on-screen footprint on narrow/portrait viewports (phones,
-    // portrait tablets) so it doesn't fill edge-to-edge — the sphere's vertical size
-    // is fixed by the camera's vertical FOV regardless of container width, so on a
-    // narrow screen there's much less horizontal breathing room unless we scale it
-    // down to compensate.
+    // Mild extra shrink on narrow/portrait viewports (phones, portrait tablets) so the
+    // globe has a little breathing room on the sides — the sphere's vertical size is
+    // fixed by the camera's vertical FOV regardless of container width, so narrower
+    // screens naturally show less width around it. Kept subtle (0.85-1x) since this is
+    // just a finishing touch, not the primary sizing mechanism.
     let viewScale = 1;
 
     const resize = () => {
@@ -223,7 +228,7 @@ export default function ParticleGlobe({ pinRef }: { pinRef?: React.RefObject<HTM
       const aspect = clientWidth / clientHeight;
       const REFERENCE_ASPECT = 1.3;
       const MIN_ASPECT = 0.45;
-      const MIN_SCALE = 0.5;
+      const MIN_SCALE = 0.85;
       const t = Math.min(Math.max((aspect - MIN_ASPECT) / (REFERENCE_ASPECT - MIN_ASPECT), 0), 1);
       viewScale = MIN_SCALE + t * (1 - MIN_SCALE);
 
@@ -266,7 +271,7 @@ export default function ParticleGlobe({ pinRef }: { pinRef?: React.RefObject<HTM
         // Smoothed scroll-driven progress, mapped across four beats within the pin's
         // range: grow (0-0.24) → explode into dust (0.21-0.6) → hold (0.6-0.8) →
         // dissipate to nothing (0.8-1.0), so the burst visibly disappears before release.
-        pinCurrent += (pinTarget - pinCurrent) * 0.09;
+        pinCurrent += (pinTarget - pinCurrent) * 0.05;
         const growEase = smoothstep(pinCurrent / 0.24);
         const explodeEase = smoothstep((pinCurrent - 0.21) / 0.39);
         const dissipateEase = smoothstep((pinCurrent - 0.8) / 0.2);
