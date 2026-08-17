@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useLang } from "@/contexts/LanguageContext";
 import BackgroundEffects from "@/components/BackgroundEffects";
+import GrainOverlay from "@/components/GrainOverlay";
 import CustomCursor from "@/components/CustomCursor";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -91,6 +92,7 @@ export default function InsaightProject() {
   return (
     <>
       <BackgroundEffects />
+      <GrainOverlay />
       <CustomCursor />
       <Header />
       
@@ -103,10 +105,14 @@ export default function InsaightProject() {
           
           <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 mb-10 lg:mb-24 items-center">
             <div className="flex-1">
+              <div className="flex items-center gap-3 mb-4 sm:mb-6">
+                <span className="index-numeral text-3xl sm:text-4xl">01</span>
+                <p className="label-mono text-xs">// Case Study</p>
+              </div>
               <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 text-foreground tracking-tight">
                 {t.project1Title}
               </h1>
-              
+
               <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
                 {["Huawei Cloud MaaS", "DeepSeek-V4-Flash", "Serverless", "CCI 2.0", "FunctionGraph", "SMN SDK"].map((tag, i) => (
                   <span key={i} className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-semibold border border-primary/20 backdrop-blur-sm">
@@ -122,7 +128,7 @@ export default function InsaightProject() {
             
             <div className="flex-1 w-full relative">
                <div 
-                 className="glass rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 aspect-video flex items-center justify-center p-1.5 sm:p-2 group shadow-[0_0_40px_rgba(var(--primary),0.1)] cursor-zoom-in"
+                 className="glass rounded-2xl sm:rounded-3xl overflow-hidden aspect-video flex items-center justify-center p-1.5 sm:p-2 group shadow-[0_0_40px_hsl(var(--primary)/0.15)] cursor-zoom-in"
                  onClick={() => setSelectedImage("/insaight/5.png")}
                >
                  <img src="/insaight/5.png" alt="Insaight Dashboard Overview" className="rounded-xl sm:rounded-2xl w-full h-full object-cover shadow-2xl transition-transform duration-700 group-hover:scale-105" />
@@ -132,9 +138,10 @@ export default function InsaightProject() {
 
           <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent my-10 sm:my-16"></div>
 
-          <div className="text-center mb-10 sm:mb-16 md:mb-24">
-            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 sm:mb-6 text-foreground">Interactive Workflow</h2>
-            <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto">Scroll down to see how InsAIght processes natural language into actionable intelligence.</p>
+          <div className="mb-10 sm:mb-16 md:mb-24 max-w-2xl">
+            <p className="label-mono text-xs mb-4">// How It Works</p>
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-black mb-4 sm:mb-6 text-foreground">Interactive Workflow</h2>
+            <p className="text-base sm:text-xl text-muted-foreground">Scroll down to see how InsAIght processes natural language into actionable intelligence.</p>
           </div>
           
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-24 items-start relative">
@@ -148,8 +155,11 @@ export default function InsaightProject() {
                    ref={(el) => stepRefs.current[idx] = el}
                    className={`transition-all duration-700 ease-out min-h-[40vh] md:min-h-[40vh] flex flex-col justify-center ${activeStep === idx ? 'opacity-100 translate-x-0' : 'opacity-30 translate-x-4 md:translate-x-8'}`}
                  >
-                   <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-primary/10 inline-flex rounded-xl sm:rounded-2xl border border-primary/20 shadow-inner">
-                     {step.icon}
+                   <div className="flex items-center gap-4 mb-4 sm:mb-6">
+                     <span className="index-numeral text-2xl sm:text-3xl">0{idx + 1}</span>
+                     <div className="p-3 sm:p-4 bg-primary/10 inline-flex rounded-xl sm:rounded-2xl border border-primary/20 shadow-inner">
+                       {step.icon}
+                     </div>
                    </div>
                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 text-foreground">{step.title}</h3>
                    <p className="text-base sm:text-xl text-muted-foreground leading-relaxed text-justify">
@@ -176,8 +186,9 @@ export default function InsaightProject() {
                          className="max-w-full max-h-full object-contain shadow-2xl rounded-xl bg-black/20 transition-transform duration-500 hover:scale-105"
                        />
                      </div>
-                     <div className="w-full glass p-2 lg:p-4 rounded-xl text-center backdrop-blur-md border border-white/10 bg-black/60 shadow-lg">
-                       <p className="font-bold text-white text-xs sm:text-sm lg:text-lg">{step.title}</p>
+                     <div className="w-full glass p-2 lg:p-4 rounded-xl text-center shadow-lg">
+                       <p className="label-mono text-[9px] sm:text-[10px] mb-0.5">0{idx + 1} / {String(flowSteps.length).padStart(2, "0")}</p>
+                       <p className="font-bold text-foreground text-xs sm:text-sm lg:text-lg">{step.title}</p>
                      </div>
                   </div>
                ))}

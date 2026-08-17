@@ -1,5 +1,6 @@
 
 import BackgroundEffects from "@/components/BackgroundEffects";
+import GrainOverlay from "@/components/GrainOverlay";
 import CustomCursor from "@/components/CustomCursor";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -15,6 +16,7 @@ export default function Index() {
   return (
     <>
       <BackgroundEffects />
+      <GrainOverlay />
       <CustomCursor />
       <Header />
       <main className="relative">

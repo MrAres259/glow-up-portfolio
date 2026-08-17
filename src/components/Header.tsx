@@ -28,13 +28,16 @@ export default function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[100] glass px-6 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center" data-interactive>
+        <Link to="/" className="flex items-center gap-3" data-interactive>
           <img src={logoImg} alt="RS Logo" className="w-auto theme-logo transition-all duration-500" style={{ height: 48 }} />
+          <span className="hidden sm:block label-mono text-[10px] leading-tight opacity-70">
+            Telecom<br />× Cloud
+          </span>
         </Link>
         <div className="flex items-center gap-4">
           <button
             onClick={toggleTheme}
-            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors px-3 py-1 glass rounded-full"
+            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors px-3 py-1 glass rounded-full grayscale"
             data-interactive
             aria-label="Toggle Theme"
           >
@@ -81,7 +84,7 @@ export default function Header() {
               }}
               data-interactive
             >
-              <span className="text-sm font-light text-muted-foreground">0{i + 1}</span>
+              <span className="label-mono text-sm font-light opacity-60">0{i + 1}</span>
               {s.label}
             </Link>
           ))}

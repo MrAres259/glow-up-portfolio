@@ -121,11 +121,17 @@ export default function ExperienceSection() {
   ];
 
   return (
-    <section id="experience" className="relative z-10 px-6 md:px-16 py-24">
+    <section id="experience" className="relative z-10 px-6 md:px-16 py-24 snap-start">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12" ref={ref}>
         
         {/* Timeline Column */}
         <div className="lg:col-span-7">
+          <p
+            className="label-mono text-xs mb-4 transition-all duration-700 ease-out"
+            style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(20px)" }}
+          >
+            // 01 — Track Record
+          </p>
           <h2
             className="text-4xl md:text-5xl font-black mb-10 text-foreground transition-all duration-700 ease-out"
             style={{
@@ -151,6 +157,12 @@ export default function ExperienceSection() {
 
         {/* Skills Column */}
         <div className="lg:col-span-5">
+          <p
+            className="label-mono text-xs mb-4 transition-all duration-700 ease-out"
+            style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(20px)", transitionDelay: "100ms" }}
+          >
+            // 02 — Toolkit
+          </p>
           <h2
             className="text-4xl md:text-5xl font-black mb-10 text-foreground transition-all duration-700 ease-out"
             style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(20px)", transitionDelay: "200ms" }}

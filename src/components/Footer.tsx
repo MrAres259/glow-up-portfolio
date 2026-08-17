@@ -22,7 +22,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+            <h4 className="label-mono text-xs mb-4">
               {t.contact}
             </h4>
             <div className="flex flex-col gap-3">
@@ -41,7 +41,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+            <h4 className="label-mono text-xs mb-4">
               Social
             </h4>
             <div className="flex gap-3">

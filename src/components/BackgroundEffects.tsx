@@ -20,9 +20,9 @@ export default function BackgroundEffects() {
 
     const animate = () => {
       const elapsed = Date.now() - start;
-      
+
       // Use sine and cosine for perfectly smooth, continuous oscillation (no violent resets)
-      const p1 = 50 + Math.sin(elapsed * 0.0003) * 50; 
+      const p1 = 50 + Math.sin(elapsed * 0.0003) * 50;
       const p2 = 50 + Math.cos(elapsed * 0.0002) * 50;
 
       el.style.backgroundPosition = `${p1}% ${p2}%, ${100 - p2}% ${100 - p1}%`;

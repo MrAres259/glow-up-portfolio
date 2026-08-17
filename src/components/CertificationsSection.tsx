@@ -41,7 +41,7 @@ function FeaturedCard({ cert, delay, visible, featuredLabel, certDetails }: { ce
       href={cert.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="glass rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-center gap-8 group hover:border-primary/50 hover:shadow-[0_0_50px_hsl(190_37%_52%/0.25)] hover:-translate-y-2 transition-all duration-500 relative overflow-hidden mb-4"
+      className="glass rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-center gap-8 group hover:border-primary/50 hover:shadow-[0_0_50px_hsl(var(--primary)/0.25)] hover:-translate-y-2 transition-all duration-500 relative overflow-hidden mb-4"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)",
@@ -79,7 +79,7 @@ function LargeCard({ cert, delay, visible }: { cert: Cert; delay: number; visibl
       href={cert.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="glass rounded-2xl p-8 flex flex-col items-center justify-center gap-5 group hover:border-primary/40 hover:shadow-[0_0_40px_hsl(190_37%_52%/0.15)] hover:-translate-y-2 transition-all duration-500 relative overflow-hidden min-h-[280px]"
+      className="glass rounded-2xl p-8 flex flex-col items-center justify-center gap-5 group hover:border-primary/40 hover:shadow-[0_0_40px_hsl(var(--primary)/0.15)] hover:-translate-y-2 transition-all duration-500 relative overflow-hidden min-h-[280px]"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0) scale(1)" : "translateY(30px) scale(0.95)",
@@ -104,7 +104,7 @@ function SmallCard({ cert, delay, visible }: { cert: Cert; delay: number; visibl
       href={cert.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="glass rounded-2xl p-5 flex items-center gap-4 group hover:border-primary/40 hover:shadow-[0_0_30px_hsl(190_37%_52%/0.1)] hover:-translate-y-2 transition-all duration-700 relative overflow-hidden"
+      className="glass rounded-2xl p-5 flex items-center gap-4 group hover:border-primary/40 hover:shadow-[0_0_30px_hsl(var(--primary)/0.1)] hover:-translate-y-2 transition-all duration-700 relative overflow-hidden"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible
@@ -146,11 +146,17 @@ export default function CertificationsSection() {
   const small = certs.filter((c) => c.size === "small");
 
   return (
-    <section id="certifications" className="relative z-10 px-6 md:px-16 py-24">
+    <section id="certifications" className="relative z-10 px-6 md:px-16 py-24 snap-start">
       <div className="max-w-6xl mx-auto" ref={ref}>
+        <p
+          className="label-mono text-xs mb-4 transition-all duration-700 ease-out"
+          style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(20px)" }}
+        >
+          // 04 — Credentials
+        </p>
         <h2
           ref={parallaxRef as React.RefObject<HTMLHeadingElement>}
-          className="text-4xl md:text-5xl font-black mb-12 text-foreground transition-all duration-700 ease-out"
+          className="text-4xl md:text-5xl xl:text-6xl font-black mb-16 text-foreground transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: `translateY(calc(var(--parallax-y, 0px) + ${isVisible ? 0 : 20}px))`,

@@ -6,33 +6,33 @@
 
 @layer base {
   :root {
-    --background: 190 20% 8%;
-    --foreground: 0 0% 95%;
+    --background: 0 0% 5%;
+    --foreground: 0 0% 96%;
 
-    --card: 190 15% 10%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 190 15% 10%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 190 37% 52%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 92%;
+    --primary-foreground: 0 0% 9%;
 
-    --secondary: 190 15% 14%;
-    --secondary-foreground: 0 0% 95%;
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 190 15% 14%;
+    --muted: 0 0% 14%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 190 37% 52%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 92%;
+    --accent-foreground: 0 0% 9%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 190 15% 18%;
-    --input: 190 15% 18%;
-    --ring: 190 37% 52%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 92%;
 
     --radius: 0.75rem;
 
@@ -47,33 +47,33 @@
   }
 
   .light {
-    --background: 190 10% 98%;
-    --foreground: 190 20% 8%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 190 20% 8%;
+    --card-foreground: 0 0% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 190 20% 8%;
+    --popover-foreground: 0 0% 8%;
 
-    --primary: 190 40% 45%;
+    --primary: 0 0% 12%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 190 10% 90%;
-    --secondary-foreground: 190 20% 8%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 8%;
 
-    --muted: 190 10% 90%;
-    --muted-foreground: 190 10% 40%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 190 40% 45%;
+    --accent: 0 0% 12%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 190 10% 85%;
-    --input: 190 10% 85%;
-    --ring: 190 40% 45%;
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 0 0% 12%;
 
     --bg-effect-low: 0.3;
     --bg-effect-high: 0.7;
@@ -83,8 +83,11 @@
 }
 
 @layer utilities {
+  .theme-logo {
+    filter: grayscale(1);
+  }
   .light .theme-logo {
-    filter: invert(1) brightness(0.2) hue-rotate(180deg);
+    filter: grayscale(1) invert(1) brightness(0.2);
   }
   .light .theme-date-badge {
     background-color: hsl(var(--foreground) / 0.1) !important;
@@ -121,12 +124,68 @@
     animation: pourFlow 2.5s linear infinite;
     border-radius: 9999px;
   }
+
+  /* Coordinate-style eyebrow / micro-label, used as a section index and tag accent */
+  .label-mono {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+  }
+
+  /* Large editorial index numeral (01, 02, 03...) */
+  .index-numeral {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    color: hsl(var(--primary) / 0.25);
+    font-weight: 700;
+    line-height: 0.8;
+  }
+
+  .light .index-numeral {
+    color: hsl(var(--primary) / 0.18);
+  }
+
+  @keyframes floatSlow {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+    50% { transform: translate3d(0, -14px, 0) rotate(1.5deg); }
+  }
+
+  .animate-float-slow {
+    animation: floatSlow 7s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float-slow {
+      animation: none;
+    }
+  }
+
+}
+
+/* Fixed film-grain overlay for a cinematic finish. Pure CSS SVG turbulence, no assets. */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.light .film-grain {
+  opacity: 0.02;
 }
 
 @layer base {
   * {
     @apply border-border;
     cursor: none !important;
+  }
+  html {
+    @apply bg-background;
+    overscroll-behavior-y: none;
+    scroll-snap-type: y proximity;
   }
   body {
     @apply bg-background text-foreground font-rubik;
