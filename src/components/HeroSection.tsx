@@ -105,8 +105,10 @@ export default function HeroSection() {
   return (
     // Pinned scroll stage: the section below stays stuck to the viewport for this
     // extra height, so the grow/explode animation finishes (and the dust holds for
-    // a beat) before scrolling is allowed to reveal the next section.
-    <div ref={pinRef} className="relative snap-start" style={{ height: "190svh" }}>
+    // a beat) before scrolling is allowed to reveal the next section. Taller on small
+    // screens since a single touch-scroll flick covers far more distance than a wheel
+    // tick, so the sequence needs more room to read as scrubbed rather than skipped.
+    <div ref={pinRef} className="relative snap-start h-[260svh] sm:h-[220svh] md:h-[190svh]">
       <section ref={ref} className="sticky top-0 h-[100svh] flex flex-col items-center justify-center z-10 px-6 pt-24 pb-20 overflow-hidden">
 
         {/* 3D particle globe backdrop */}

@@ -184,12 +184,21 @@ export default function ParticleGlobe({ pinRef }: { pinRef?: React.RefObject<HTM
     // viewport top), 1 = pin about to release. The hero stays pinned for this whole
     // range, so the grow → explode → hold → dissipate sequence always finishes before
     // the next section is allowed to scroll into view.
+    //
+    // The "viewport slot" height is measured from this component's own container
+    // (which fills the sticky, pinned section) rather than window.innerHeight —
+    // window.innerHeight fluctuates on mobile as the browser's address bar
+    // collapses/expands mid-scroll, which was making the scrollable distance shrink
+    // out from under the calculation and skip most of the animation on the first
+    // touch scroll. The container's own rect stays stable since it's sized off the
+    // same svh unit as the pin wrapper.
     let pinTarget = 0;
     let pinCurrent = 0;
     const handleScroll = () => {
       const progressEl = pinRef?.current ?? container;
       const rect = progressEl.getBoundingClientRect();
-      const scrollableDistance = Math.max(rect.height - window.innerHeight, 1);
+      const viewportSlot = pinRef?.current ? container.getBoundingClientRect().height : window.innerHeight;
+      const scrollableDistance = Math.max(rect.height - viewportSlot, 1);
       pinTarget = Math.min(Math.max(-rect.top / scrollableDistance, 0), 1);
     };
     if (!reduceMotion) {
@@ -197,12 +206,27 @@ export default function ParticleGlobe({ pinRef }: { pinRef?: React.RefObject<HTM
       handleScroll();
     }
 
+    // Shrinks the globe's on-screen footprint on narrow/portrait viewports (phones,
+    // portrait tablets) so it doesn't fill edge-to-edge — the sphere's vertical size
+    // is fixed by the camera's vertical FOV regardless of container width, so on a
+    // narrow screen there's much less horizontal breathing room unless we scale it
+    // down to compensate.
+    let viewScale = 1;
+
     const resize = () => {
       const { clientWidth, clientHeight } = container;
       if (clientWidth === 0 || clientHeight === 0) return;
       camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight, false);
+
+      const aspect = clientWidth / clientHeight;
+      const REFERENCE_ASPECT = 1.3;
+      const MIN_ASPECT = 0.45;
+      const MIN_SCALE = 0.5;
+      const t = Math.min(Math.max((aspect - MIN_ASPECT) / (REFERENCE_ASPECT - MIN_ASPECT), 0), 1);
+      viewScale = MIN_SCALE + t * (1 - MIN_SCALE);
+
       handleScroll();
     };
     resize();
@@ -268,14 +292,14 @@ export default function ParticleGlobe({ pinRef }: { pinRef?: React.RefObject<HTM
         positionAttr.needsUpdate = true;
 
         const growScale = 1 + growEase * 0.55 * (1 - explodeEase * 0.6);
-        globeGroup.scale.setScalar(growScale);
+        globeGroup.scale.setScalar(growScale * viewScale);
 
         // Grow the dust motes rather than shrinking them, and hold opacity near-full
         // through the hold beat — then thin them out to nothing during the final
         // dissipate beat, so the explosion visibly disperses into thin air.
         globeMaterial.size = baseGlobeSize * (1 + explodeEase * 0.9) * (1 - dissipateEase * 0.85);
         globeMaterial.opacity = (0.9 + explodeEase * 0.1) * (1 - dissipateEase);
-        starPoints.scale.setScalar(1 + explodeEase * 0.35);
+        starPoints.scale.setScalar((1 + explodeEase * 0.35) * viewScale);
 
         renderer.render(scene, camera);
       };
